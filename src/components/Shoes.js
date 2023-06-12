@@ -1,13 +1,14 @@
 import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext } from "react";
 import "../assets/css/Shoes.css";
 import { motion, useAnimationControls } from "framer-motion";
+import { ShoesContext } from "../providers/ShoesProvider";
 
-export default function Shoes({ id, image, name, description, price, color }) {
-  const padd = id === 1 ? "0 0" : "40px 0";
+function Shoes({ id, image, name, description, price, color, quantity }) {
   const controls = useAnimationControls();
   const [isClicked, setIsClicked] = useState(false);
+  const { allShoes, handleCartUpdate } = useContext(ShoesContext);
 
   const handleClick = async () => {
     await controls.start({
@@ -17,10 +18,18 @@ export default function Shoes({ id, image, name, description, price, color }) {
     setIsClicked(true);
   };
 
+  const handleAddToCart = () => {
+    const findShoes = allShoes.find((shoe) => shoe.id === id);
+    if (findShoes.quantity > 0) return;
+    if (handleCartUpdate(id, "add")) {
+      handleClick();
+    }
+  };
+
   return (
     <div
       style={{
-        padding: padd,
+        padding: id === 1 ? "0 0" : "40px 0",
       }}
     >
       <Card sx={{ maxWidth: 345, borderRadius: "30px" }}>
@@ -75,28 +84,63 @@ export default function Shoes({ id, image, name, description, price, color }) {
             fontWeight: "bold",
           }}
         >{`$${price}`}</div>
-        <motion.div
-          style={{
-            height: "46px",
-            borderRadius: "100px",
-            overflow: "hidden",
-            position: "relative",
-          }}
-          animate={controls}
-        >
-          <Button
-            variant="contained"
-            className="addToCart"
+        {quantity === 0 ? (
+          <motion.div
             style={{
-              whiteSpace: "nowrap",
               height: "46px",
-              width: "127px",
+              borderRadius: "100px",
+              overflow: "hidden",
+              position: "relative",
             }}
-            onClick={handleClick}
+            animate={controls}
           >
-            {!isClicked ? (
-              <p>ADD TO CART</p>
-            ) : (
+            <Button
+              variant="contained"
+              className="addToCart"
+              style={{
+                whiteSpace: "nowrap",
+                height: "46px",
+                width: "127px",
+              }}
+              onClick={handleAddToCart}
+            >
+              {!isClicked ? (
+                <p>ADD TO CART</p>
+              ) : (
+                <img
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-250%, -50%)",
+                    width: "20px",
+                  }}
+                  src="/images/check.png"
+                  alt="check"
+                />
+              )}
+            </Button>
+          </motion.div>
+        ) : (
+          <div
+            style={{
+              height: "46px",
+              width: "46px",
+              borderRadius: "100px",
+              overflow: "hidden",
+              position: "relative",
+            }}
+          >
+            <Button
+              variant="contained"
+              className="addToCart"
+              style={{
+                whiteSpace: "nowrap",
+                height: "46px",
+                width: "127px",
+              }}
+              onClick={handleAddToCart}
+            >
               <img
                 style={{
                   position: "absolute",
@@ -108,10 +152,12 @@ export default function Shoes({ id, image, name, description, price, color }) {
                 src="/images/check.png"
                 alt="check"
               />
-            )}
-          </Button>
-        </motion.div>
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
+export default Shoes;
