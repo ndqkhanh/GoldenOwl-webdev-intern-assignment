@@ -1,0 +1,28 @@
+.button {
+  height: 28px;
+  width: 28px;
+  border-radius: 100%;
+  background-color: #eee;
+  position: relative;
+}
+
+.button:hover {
+  background-color: #ddd !important;
+  cursor: pointer;
+}
+
+.trash {
+  height: 28px;
+  width: 28px;
+  border-radius: 100%;
+  background-color: #f6c90e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.trash:hover {
+  background-color: #f8d43f;
+  box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+}

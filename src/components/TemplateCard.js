@@ -1,48 +1,43 @@
 import Card from "@mui/material/Card";
 import Typography from "@mui/material/Typography";
-import * as React from "react";
-import PerfectScrollbar from "react-perfect-scrollbar";
+import React, { useContext, useMemo } from "react";
 import "react-perfect-scrollbar/dist/css/styles.css";
-import shoesData from "../assets/data/shoes.json";
-import Shoes from "./Shoes";
 import "../assets/css/TemplateCard.css";
+import { ShoesContext } from "../providers/ShoesProvider";
+import CartItem from "./CartItem";
+import Shoes from "./Shoes";
 
-export default function TemplateCard({ isOurProducts }) {
-  const [shoes, setShoes] = React.useState(shoesData);
-  const [cart, setCart] = React.useState([]);
+function TemplateCard({ isOurProducts }) {
+  const { allShoes } = useContext(ShoesContext);
+
+  const isCartExist = useMemo(() => {
+    return allShoes.some((shoe) => shoe.quantity > 0);
+  }, [allShoes]);
+
+  const shoesWithQuantityMoreThanOne = useMemo(() => {
+    const res = [];
+    for (let i = 0; i < allShoes.length; i++) {
+      if (allShoes[i].quantity > 0) {
+        res.push(allShoes[i]);
+      }
+    }
+    return res;
+  }, [allShoes]);
+
+  const totalPrice = useMemo(() => {
+    return allShoes.reduce((acc, shoe) => {
+      if (shoe.quantity > 0) {
+        acc += shoe.price * shoe.quantity;
+      }
+      return acc;
+    }, 0);
+  }, [allShoes]);
+
   return (
-    <Card
-      // sx={{
-      //   width: "300px",
-      //   height: "600px",
-      //   borderRadius: "30px",
-      //   overflow: "hidden",
-      //   position: "relative",
-      //   padding: "0 28px",
-      // }}
-      className="cardContainer"
-    >
-      <div
-        className="circle"
-        // style={{
-        //   width: "300px",
-        //   height: "300px",
-        //   borderRadius: "100%",
-        //   position: "absolute",
-        //   backgroundColor: "#f6c90e",
-        //   transform: "translate(-200px, -150px)",
-        //   zIndex: "0",
-        // }}
-      ></div>
+    <Card className="cardContainer">
+      <div className="circle"></div>
       <img className="nikeLogo" alt="Nike logo" src="/images/nike.png" />
-      <div
-        // style={{
-        //   display: "flex",
-        //   justifyContent: "space-between",
-        //   alignItems: "center",
-        // }}
-        className="headerContainer"
-      >
+      <div className="headerContainer">
         <Typography
           style={{
             fontSize: "24px",
@@ -58,18 +53,18 @@ export default function TemplateCard({ isOurProducts }) {
         <Typography
           style={{
             fontSize: "24px",
-            fontWeight: "bold",
+            fontWeight: 700,
             position: "relative",
             marginBottom: "16px",
             zIndex: "1",
           }}
         >
-          {!isOurProducts && `$0.00`}
+          {!isOurProducts && `$${totalPrice.toFixed(2)}`}
         </Typography>
       </div>
       {isOurProducts ? (
         <div className="scroller">
-          {shoes.shoes.map((shoe) => (
+          {allShoes.map((shoe) => (
             <Shoes
               key={shoe.id}
               id={shoe.id}
@@ -78,31 +73,26 @@ export default function TemplateCard({ isOurProducts }) {
               description={shoe.description}
               price={shoe.price}
               color={shoe.color}
+              quantity={shoe.quantity}
             />
           ))}
           {/* </PerfectScrollbar> */}
         </div>
-      ) : cart.length > 0 ? (
-        <PerfectScrollbar
-          style={{
-            height: "502px",
-            width: "100%",
-            position: "relative",
-            zIndex: "1",
-          }}
-        >
-          {cart.map((shoe) => (
-            <Shoes
+      ) : isCartExist > 0 ? (
+        <div className="scroller">
+          {shoesWithQuantityMoreThanOne.map((shoe) => (
+            <CartItem
               key={shoe.id}
               id={shoe.id}
               image={shoe.image}
               name={shoe.name}
-              description={shoe.description}
               price={shoe.price}
               color={shoe.color}
+              quantity={shoe.quantity}
             />
           ))}
-        </PerfectScrollbar>
+          {/* </PerfectScrollbar> */}
+        </div>
       ) : (
         <Typography
           style={{
@@ -121,3 +111,5 @@ export default function TemplateCard({ isOurProducts }) {
     </Card>
   );
 }
+
+export default TemplateCard;
