@@ -3,7 +3,6 @@ import "./assets/css/App.css";
 import TemplateCard from "./components/TemplateCard";
 
 function App() {
-  console.log("App");
   return (
     <div className="App">
       <Grid

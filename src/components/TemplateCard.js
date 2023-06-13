@@ -9,7 +9,6 @@ import Shoes from "./Shoes";
 
 function TemplateCard({ isOurProducts }) {
   const { allShoes } = useContext(ShoesContext);
-  console.log("allShoes", allShoes);
 
   const isCartExist = useMemo(() => {
     return allShoes.some((shoe) => shoe.quantity > 0);
@@ -54,7 +53,7 @@ function TemplateCard({ isOurProducts }) {
         <Typography
           style={{
             fontSize: "24px",
-            fontWeight: "bold",
+            fontWeight: 700,
             position: "relative",
             marginBottom: "16px",
             zIndex: "1",
@@ -87,7 +86,6 @@ function TemplateCard({ isOurProducts }) {
               id={shoe.id}
               image={shoe.image}
               name={shoe.name}
-              description={shoe.description}
               price={shoe.price}
               color={shoe.color}
               quantity={shoe.quantity}
