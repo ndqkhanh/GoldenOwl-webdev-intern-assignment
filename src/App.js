@@ -20,10 +20,22 @@ function App() {
         }}
       >
         <Grid item xs={12} md={6}>
-          <TemplateCard isOurProducts={true} />
+          <div
+            style={{
+              marginBottom: "30px",
+            }}
+          >
+            <TemplateCard isOurProducts={true} />
+          </div>
         </Grid>
         <Grid item xs={12} md={6}>
-          <TemplateCard isOurProducts={false} />
+          <div
+            style={{
+              marginBottom: "30px",
+            }}
+          >
+            <TemplateCard isOurProducts={false} />
+          </div>
         </Grid>
       </Grid>
     </div>
