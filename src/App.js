@@ -15,6 +15,7 @@ function App() {
           justifyContent: "space-between",
           alignItems: "center",
           margin: "0 auto",
+          marginBottom: "30px",
         }}
       >
         <Grid item xs={12} md={6}>
