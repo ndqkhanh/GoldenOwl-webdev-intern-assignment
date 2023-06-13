@@ -34,7 +34,12 @@ function TemplateCard({ isOurProducts }) {
   }, [allShoes]);
 
   return (
-    <Card className="cardContainer">
+    <Card
+      className="cardContainer"
+      style={{
+        borderRadius: "30px",
+      }}
+    >
       <div className="circle"></div>
       <img className="nikeLogo" alt="Nike logo" src="/images/nike.png" />
       <div className="headerContainer">
