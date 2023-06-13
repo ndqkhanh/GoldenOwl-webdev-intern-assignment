@@ -10,6 +10,7 @@ function App() {
         spacing={3}
         style={{
           display: "flex",
+          height: "100vh",
           maxWidth: "760px",
           position: "relative",
           justifyContent: "space-between",
